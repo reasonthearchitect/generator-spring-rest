@@ -1,0 +1,25 @@
+# Disable the spring security default configuration from spring-boot-actuator
+management.security.enabled: false
+security.basic.enabled: false
+
+# Disable Jolokia - An http/json bridge for remote JMX access
+endpoints.jolokia.enabled: false
+
+async:
+    corePoolSize: 2
+    maxPoolSize: 50
+    queueCapacity: 10000
+
+spring:
+    mvc:
+        favicon:
+            enabled: false
+
+swagger:
+    title: <%=baseName%> API
+    description: <%=baseName%> applications and beyond!
+    version: 0.0.1
+    termsOfServiceUrl: http://jhipster.github.io/
+    contact:
+    license: Apache 2.0
+    licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html

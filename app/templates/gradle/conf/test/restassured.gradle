@@ -1,0 +1,19 @@
+sourceSets {
+    functional { test ->
+        compileClasspath = sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+        runtimeClasspath = output + sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+
+        groovy.srcDirs = ['src/functional/groovy']
+        //resources.srcDirs = ['src/jbehave/stories']
+    }
+}
+
+dependencies {
+	testCompile group: 'com.jayway.restassured',     name: 'rest-assured',   version: rest_assered_version
+}
+
+task functional(type: Test) {
+    testClassesDir = sourceSets.functional.output.classesDir
+    classpath = sourceSets.integration.runtimeClasspath
+    classpath = sourceSets.functional.runtimeClasspath
+}

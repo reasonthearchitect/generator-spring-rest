@@ -1,0 +1,20 @@
+sourceSets {
+    jbehave { test ->
+        compileClasspath = sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+        runtimeClasspath = output + sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+
+        java.srcDirs = ['src/jbehave/java']
+        groovy.srcDirs = ['src/jbehave/groovy']
+        resources.srcDirs = ['src/jbehave/stories']
+    }
+}
+
+dependencies {
+    testCompile group: 'org.jbehave', 	name: 'jbehave-core', 		version: jbehave_version
+    testCompile group: 'org.jbehave', 	name: 'jbehave-spring', 	version: jbehave_version
+}
+
+task jbehave(type: Test) {
+    testClassesDir = sourceSets.jbehave.output.classesDir
+    classpath = sourceSets.jbehave.runtimeClasspath
+}

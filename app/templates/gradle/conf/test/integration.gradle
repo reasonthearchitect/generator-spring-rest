@@ -1,0 +1,20 @@
+sourceSets {
+    integration { test ->
+        compileClasspath = sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+        runtimeClasspath = output + sourceSets.main.output + sourceSets.test.output + configurations.testRuntime
+
+        groovy.srcDirs = ['src/integration/groovy']
+        //resources.srcDirs = ['src/jbehave/stories']
+    }
+}
+
+dependencies {
+    testCompile group: 'org.springframework.boot',  name: 'spring-boot-starter-test'
+    testCompile group: 'org.spockframework',        name: 'spock-spring',                version: spock_version
+    //testCompile group: 'org.springframework.boot',  name: 'spring-boot-starter-jetty'
+}
+
+task integration(type: Test) {
+    testClassesDir = sourceSets.integration.output.classesDir
+    classpath = sourceSets.integration.runtimeClasspath
+}

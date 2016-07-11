@@ -1,0 +1,32 @@
+if (project.hasProperty('prod')) {
+    apply from: 'gradle/conf/profiles/profile_prod.gradle'
+} else if (project.hasProperty('fast')) {
+    apply from: 'gradle/conf/profiles/profile_fast.gradle'
+} else {
+  apply from: 'gradle/conf/profiles/profile_dev.gradle'
+}
+
+
+repositories {
+
+    mavenLocal()
+    maven { url 'http://repo.spring.io/milestone' }
+    maven { url 'http://repo.spring.io/snapshot' }
+    maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
+    maven { url 'https://oss.sonatype.org/content/repositories/releases' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'http://repo.maven.apache.org/maven2' }
+//    maven{ url 'http://dynamodb-local.s3-website-us-west-2.amazonaws.com/release' }
+
+}
+
+configurations.all {
+  resolutionStrategy {
+    // force certain versions of dependencies (including transitive)
+    //  *append new forced modules:
+    force group: 'com.fasterxml.jackson.core',  name: 'jackson-core',       version: jackson_version
+    force group: 'com.fasterxml.jackson.core',  name: 'jackson-databind',   version: jackson_version
+    force group: 'joda-time',                   name: 'joda-time',          version: joda_time_version
+    force group: 'com.google.guava',            name: 'guava',              version: force_google_guave_version
+  }
+}

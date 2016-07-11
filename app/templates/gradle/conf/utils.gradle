@@ -1,0 +1,9 @@
+dependencies {
+    compile group: 'commons-lang', 	name: 'commons-lang', 		version: commons_lang_version
+    compile group: 'commons-io', 	name: 'commons-io', 		version: commons_io_version
+    compile group: 'javax.inject', 	name: 'javax.inject', 		version: javax_inject_version
+    compile group: 'joda-time', 	name: 'joda-time', 			version: joda_time_version
+    compile(group: 'io.springfox', 	name: 'springfox-swagger2', version: springfox_version){
+        exclude module: 'mapstruct'
+    }
+}

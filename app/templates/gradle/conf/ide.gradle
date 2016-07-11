@@ -1,0 +1,26 @@
+
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+configurations {
+    provided
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += [configurations.provided]
+        testSourceDirs += file('src/jbehave/java')
+        testSourceDirs += file('src/jbehave/groovy')
+        testSourceDirs += file('src/jbehave/stories')
+        testSourceDirs += file('src/integration/groovy')
+        testSourceDirs += file('src/functional/groovy')
+    }
+}
+
+configurations {
+    providedRuntime
+}
+
+dependencies {
+	provided group: 'org.mapstruct', name: 'mapstruct-processor', version: mapstruct_version
+}

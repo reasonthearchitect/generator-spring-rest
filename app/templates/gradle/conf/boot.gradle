@@ -1,0 +1,44 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+
+version = '0.0.1-SNAPSHOT'
+description = ''
+
+defaultTasks 'bootRun'
+
+bootRepackage {
+   mainClass = '<%= packageName %>.Application'
+}
+
+springBoot {
+    mainClass = '<%= packageName %>.Application'
+}
+
+bootRun {
+    addResources = false
+}
+
+configurations {
+    all*.exclude module : 'spring-boot-starter-logging'
+}
+
+dependencies {
+    compile group: 'ch.qos.logback',      name: 'logback-core', version: logback_version
+    compile group: 'ch.qos.logback',      name: 'logback-classic', version: logback_version
+	compile group: 'org.springframework.boot',      name: 'spring-boot-actuator'
+    compile group: 'org.springframework.boot',      name: 'spring-boot-starter-security'
+    compile group: 'org.springframework.boot',      name: 'spring-boot-autoconfigure'
+    compile group: 'org.springframework.boot',      name: 'spring-boot-loader-tools'
+    compile group: 'org.springframework.boot',      name: 'spring-boot-starter-logging'
+    compile group: 'org.springframework.boot',      name: 'spring-boot-starter-aop'
+    compile ('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+
+    compile(group: 'org.springframework',           name: 'spring-context-support') {
+        exclude(module: 'quartz')
+    }
+    compile group: 'org.springframework.boot',      name: 'spring-boot-starter-data-elasticsearch'
+}

@@ -1,0 +1,44 @@
+{
+  "name": "generator-spring-rest",
+  "version": "0.0.1",
+  "description": "Generates the golden architecture for development of microservices",
+  "keywords": [
+    "Golden",
+    "Architecture"
+  ],
+  "author": {
+    "name": "Reason The Architect",
+    "email": "",
+    "url": ""
+  },
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "dependencies": {
+    "chalk": "1.0.0",
+    "cheerio": "0.19.0",
+    "ejs": "2.3.4",
+    "html-wiring": "1.1.0",
+    "insight": "0.6.0",
+    "lodash": "3.10.0",
+    "mkdirp": "0.5.1",
+    "shelljs": "0.5.0",
+    "underscore.string": "3.0.3",
+    "yeoman-generator": "0.20.3",
+    "yo": "1.4.6"
+  },
+  "devDependencies": {
+    "grunt": "0.4.5",
+    "mocha": "1.21.5"
+  },
+  "engines": {
+    "node": ">=0.12.0",
+    "npm": ">=1.4.0"
+  },
+  "license": "Apache-2.0"
+}

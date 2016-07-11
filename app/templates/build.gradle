@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE')
+    }
+}
+
+configurations {
+  all*.exclude group: 'commons-logging'
+}
+
+apply from: 'gradle/conf/boot.gradle'
+apply from: 'gradle/conf/groovy.gradle'
+apply from: 'gradle/conf/ide.gradle'
+apply from: 'gradle/conf/jackson.gradle'
+apply from: 'gradle/conf/lombok.gradle'
+apply from: 'gradle/conf/meta.gradle'
+apply from: 'gradle/conf/metrics.gradle'
+apply from: 'gradle/conf/spring-cloud.gradle'
+apply from: 'gradle/conf/utils.gradle'
+
+apply from: 'gradle/conf/test/integration.gradle'
+apply from: 'gradle/conf/test/unit.gradle'
+apply from: 'gradle/conf/test/jbehave.gradle'
+apply from: 'gradle/conf/test/sonar.gradle'
+apply from: 'gradle/conf/test/restassured.gradle'
+
+sourceCompatibility=1.8
+targetCompatibility=1.8
+
+clean {
+    delete "target"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.7'
+}
+
+task stage(dependsOn: 'bootRepackage') {
+}
