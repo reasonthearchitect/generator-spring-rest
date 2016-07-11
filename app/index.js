@@ -52,12 +52,23 @@ SianGenerator.prototype.askFor = function askFor() {
             },
             message: '(2/' + questions + ') What is your default Java package name?',
             default: 'com.tek.myservice'
+        },
+        {
+            type: 'input',
+            name: 'gitreponame',
+            validate: function (input) {
+                if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+                return 'Not a valid Git URL';
+            },
+            message: '(3/' + questions + ') What is the parent git repo name?',
+            default: 'reasonthearchitect'
         }
 
     ];
     console.log("1");
     this.baseName               = this.config.get('baseName');
     this.packageName            = this.config.get('packageName');
+    this.gitreponame            = this.config.get('gitreponame')
 
     if (this.baseName != null &&
         this.packageName != null
@@ -74,9 +85,9 @@ SianGenerator.prototype.askFor = function askFor() {
             }
             this.baseName               = props.baseName;
             this.packageName            = props.packageName;
+            this.gitreponame            = props.gitreponame;
             var generated               = ".generated";
             this.packageNameGenerated   = props.packageName +  generated;
-            console.log("Doing this here.");
             
             cb();
         }.bind(this));
@@ -107,6 +118,7 @@ SianGenerator.prototype.app = function app() {
     this.config.set('baseName',             this.baseName);
     this.config.set('packageName',          this.packageName);
     this.config.set('packageNameGenerated', this.packageNameGenerated);
+    this.config.set('gitreponame'),         this.gitreponame;      
 };
 
 

@@ -3,16 +3,15 @@ resources:
 - name: resource-<%= baseName %>
   type: git
   source:
-    uri: https://github.com/reasonthearchitect/<%= baseName %>.git
+    uri: https://github.com/<%= gitreponame %>/<%= baseName %>.git
     branch: master
 
 jobs:
 - name: job-build
-  public: true
   plan:
   - get: resource-<%= baseName %>
     trigger: true
-  - task: build_test
+  - task: job-build
     config:
       platform: linux
       image_resource:
@@ -21,5 +20,9 @@ jobs:
       inputs:
         - name: resource-<%= baseName %>
       run:
-        path: cat
-        args: [resource-<%= baseName %>/build.gradle]
+        path: gradle
+        args: ["--build-file", "resource-<%= baseName %>/build.gradle", "assemble"]
+      params:
+        TERM: -dumb
+        GRADLE_OPTS: -Dorg.gradle.native=false
+        
