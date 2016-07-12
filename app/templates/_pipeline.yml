@@ -3,15 +3,26 @@ resources:
 - name: resource-<%= baseName %>
   type: git
   source:
-    uri: https://github.com/<%= gitreponame %>/<%= baseName %>.git
+    uri: https://github.com/<%= gitreponame %>.git
     branch: master
 
+- name: <%= baseName %>-docker-image
+  type: docker-image
+  source:
+    repository: {{docker-hub-image-name}}
+    email: {{docker-hub-email}}
+    username: {{docker-hub-username}}
+    password: {{docker-hub-api-key}}
+
 jobs:
-- name: job-build
+- name: job-build-docker
+  public: true
+  serial: true
   plan:
-  - get: resource-<%= baseName %>
-    trigger: true
-  - task: job-build
-    privileged: true
-    file: resource-<%= baseName %>/ci/tasks/package.yml
-        
+    - get: resource-<%= baseName %>
+      trigger: true
+    - task: job-build
+      file: resource-<%= baseName %>/ci/tasks/package.yml
+    - put: <%= baseName %>-docker-image
+      params:
+        build: resource-jar

@@ -61,7 +61,7 @@ SianGenerator.prototype.askFor = function askFor() {
                 return 'Not a valid Git URL';
             },
             message: '(3/' + questions + ') What is the parent git repo name?',
-            default: 'reasonthearchitect'
+            default: 'reasonthearchitect/<change-me>'
         }
 
     ];
@@ -125,6 +125,7 @@ SianGenerator.prototype.app = function app() {
 function doroot(thing) {
     thing.template('_README.md', 'README.md', thing, {});
     thing.template('_pipeline.yml', 'pipeline.yml', thing, {});
+    thing.copy('credentials.example.yml', 'credentials.example.yml');
     thing.copy('.gitignore','.gitignore');
     thing.copy('LICENSE','LICENSE');
 }
