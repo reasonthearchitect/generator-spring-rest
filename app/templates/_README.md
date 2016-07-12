@@ -23,3 +23,7 @@ CONCOURSE_LITE=https://github.com/concourse/concourse-lite
 
 //change the credentials file.
 ./fly sp -t aws configure -c pipeline.yml -p <%= baseName %> --load-vars-from=credentials.yml
+
+./fly -t aws unpause-pipeline -p <%= baseName %>
+
+./fly -t aws destroy-pipeline -p <%= baseName %>
