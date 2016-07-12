@@ -57,7 +57,7 @@ SianGenerator.prototype.askFor = function askFor() {
             type: 'input',
             name: 'gitreponame',
             validate: function (input) {
-                if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+                if (/^([a-zA-Z0-9_]*\/[a-zA-Z0-9_]*)$/.test(input)) return true;
                 return 'Not a valid Git URL';
             },
             message: '(3/' + questions + ') What is the parent git repo name?',
@@ -114,6 +114,7 @@ SianGenerator.prototype.app = function app() {
     dogradlew(this);
     dogradle(this);
     doapp(this);
+    doconcourse(this);
 
     this.config.set('baseName',             this.baseName);
     this.config.set('packageName',          this.packageName);
@@ -122,10 +123,17 @@ SianGenerator.prototype.app = function app() {
 };
 
 
-function doroot(thing) {
-    thing.template('_README.md', 'README.md', thing, {});
+function doconcourse(thing) {
+
     thing.template('_pipeline.yml', 'pipeline.yml', thing, {});
     thing.copy('credentials.example.yml', 'credentials.example.yml');
+    thing.template('ci/tasks/_package.yml','ci/tasks/package.yml', thing, {});
+    thing.template('ci/scripts/_package.sh','ci/scripts/package.sh', thing, {});
+    thing.template('_Dockerfile','Dockerfile', thing, {});
+}
+
+function doroot(thing) {
+    thing.template('_README.md', 'README.md', thing, {});
     thing.copy('.gitignore','.gitignore');
     thing.copy('LICENSE','LICENSE');
 }

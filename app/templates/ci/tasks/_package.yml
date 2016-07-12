@@ -7,10 +7,9 @@ image_resource:
 inputs:
   - name: resource-<%= baseName %>
 
-run:
-  path: gradle
-  args: ["--build-file", "resource-<%= baseName %>/build.gradle", "assemble"]
+outputs:
+  - name: resource-jar
 
-params:
-  TERM: -dumb
-  GRADLE_OPTS: -Dorg.gradle.native=false
+run:
+  path: ./resource-<%= baseName %>/ci/scripts/package.sh
+

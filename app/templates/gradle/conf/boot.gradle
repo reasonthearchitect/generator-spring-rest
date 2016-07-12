@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 
-version = '0.0.1-SNAPSHOT'
+archivesBaseName = '<%= baseName %>'
 description = ''
 
 defaultTasks 'bootRun'

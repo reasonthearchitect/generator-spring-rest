@@ -96,6 +96,7 @@ Desktop.ini
 *~
 .merge_file*
 credentials.yml
+fly
 
 ######################
 # Gradle Wrapper
