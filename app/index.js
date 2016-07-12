@@ -69,6 +69,7 @@ SianGenerator.prototype.askFor = function askFor() {
     this.baseName               = this.config.get('baseName');
     this.packageName            = this.config.get('packageName');
     this.gitreponame            = this.config.get('gitreponame')
+    this.packageNameGenerated   = this.config.get('packageNameGenerated');
 
     if (this.baseName != null &&
         this.packageName != null
@@ -136,6 +137,7 @@ function doroot(thing) {
     thing.template('_README.md', 'README.md', thing, {});
     thing.copy('.gitignore','.gitignore');
     thing.copy('LICENSE','LICENSE');
+    thing.template('_Vagrantfile', 'Vagrantfile', thing, {});
 }
 
 function dogradlew(thing) {
@@ -176,7 +178,7 @@ function dogradle(thing) {
 }
 
 function doapp(thing, interpolateRegex) {
-    var javaGeneratedDir = 'src/main/java/' + thing.packageFolder + '/generated/';
+    var javaGeneratedDir = 'src/main/java/' + thing.packageName + '/generated/';
     var resourceDir = 'src/main/resources/';
     var interpolateRegex = /<%=([\s\S]+?)%>/g;
 

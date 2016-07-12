@@ -7,10 +7,7 @@ liquibase:
 spring:
     profiles:
         active: prod
-    data:
-        elasticsearch:
-            cluster-name:
-            cluster-nodes: localhost:9200
+    
 metrics:
     jmx.enabled: true
     spark:

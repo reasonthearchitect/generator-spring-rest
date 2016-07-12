@@ -40,5 +40,4 @@ dependencies {
     compile(group: 'org.springframework',           name: 'spring-context-support') {
         exclude(module: 'quartz')
     }
-    compile group: 'org.springframework.boot',      name: 'spring-boot-starter-data-elasticsearch'
 }

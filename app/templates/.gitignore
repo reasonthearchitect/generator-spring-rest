@@ -95,6 +95,10 @@ Desktop.ini
 *.*~
 *~
 .merge_file*
+
+######################
+# ConcourseCi
+######################
 credentials.yml
 fly
 
@@ -102,3 +106,9 @@ fly
 # Gradle Wrapper
 ######################
 !gradle/wrapper/gradle-wrapper.jar
+
+######################
+# Gradle Wrapper
+######################
+.vagrant/**
+
