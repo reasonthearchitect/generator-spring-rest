@@ -126,7 +126,7 @@ SianGenerator.prototype.app = function app() {
 function doconcourse(thing) {
 
     thing.template('_pipeline.yml', 'pipeline.yml', thing, {});
-    thing.copy('credentials.example.yml', 'credentials.example.yml');
+    thing.copy('credentials.example.yml', 'credentials.yml');
     thing.template('ci/tasks/_package.yml','ci/tasks/package.yml', thing, {});
     thing.template('ci/scripts/_package.sh','ci/scripts/package.sh', thing, {});
     thing.template('_Dockerfile','Dockerfile', thing, {});

@@ -19,3 +19,7 @@ Your identification has been saved in /home/ubuntu/.ssh/id_rsa.
 Your public key has been saved in /home/ubuntu/.ssh/id_rsa.pub
 
 CONCOURSE_LITE=https://github.com/concourse/concourse-lite
+
+
+//change the credentials file.
+./fly sp -t aws configure -c pipeline.yml -p <%= baseName %> --load-vars-from=credentials.yml
