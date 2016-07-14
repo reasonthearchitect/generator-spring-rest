@@ -132,9 +132,12 @@ function dodockerkafka(thing) {
 }
 
 function dodocs(thing) {
-    thing.template('_README.md',                'README.md', thing, {});
-    thing.template('docs/_pipeline.md',         'docs/pipeline.md', thing, {});
-    thing.template('docs/_kafkaSetup.md',       'docs/kafkaSetup.md', thing, {});
+    thing.template('_README.md',                 'README.md', thing, {});
+    thing.template('docs/_pipeline_setup.md',    'docs/pipeline_setup.md', thing, {});
+    thing.template('docs/_kafka_setup.md',       'docs/kafka_setup.md', thing, {});
+    thing.template('docs/_dev_env_setup.md',     'docs/dev_env_setup.md', thing, {});
+    thing.template('docs/_dev_project_setup.md', 'docs/dev_project_setup.md', thing, {});
+
 }
 
 function doconcourse(thing) {
@@ -150,7 +153,6 @@ function doroot(thing) {
     thing.template('_README.md',                'README.md', thing, {});
     thing.copy('.gitignore',                    '.gitignore');
     thing.copy('LICENSE',                       'LICENSE');
-    thing.template('_Vagrantfile',              'Vagrantfile', thing, {});
 }
 
 function dogradlew(thing) {
