@@ -65,7 +65,7 @@ SianGenerator.prototype.askFor = function askFor() {
         }
 
     ];
-    console.log("1");
+
     this.baseName               = this.config.get('baseName');
     this.packageName            = this.config.get('packageName');
     this.gitreponame            = this.config.get('gitreponame')
@@ -97,17 +97,14 @@ SianGenerator.prototype.app = function app() {
     var insight = this.insight();
     insight.track('generator', 'app');
 
-    var packageFolder = this.packageName.replace(/\./g, '/');
-    var javaDir = 'src/main/java/' + packageFolder + '/';
-    var groovyItTest = 'src/integration/groovy/' + packageFolder + '/it/';
-    var resourceDir = 'src/main/resources/';
-    var conf = "conf/"
-    var webappDir = 'src/main/webapp/';
+    this.packageFolder = this.packageName.replace(/\./g, '/');
+    
      // so that tags in templates do not get mistreated as _ templates
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
     this.camelizedBaseName = _.camelize(this.baseName);
     this.slugifiedBaseName = _.slugify(this.baseName);
-    
+
+
     doroot(this);
     dodocs(this);
     dogradlew(this);
@@ -115,11 +112,14 @@ SianGenerator.prototype.app = function app() {
     doapp(this);
     doconcourse(this);
     dodockerkafka(this);
+    doJbehave(this, this.packageFolder); 
+
 
     this.config.set('baseName',             this.baseName);
     this.config.set('packageName',          this.packageName);
     this.config.set('packageNameGenerated', this.packageNameGenerated);
-    this.config.set('gitreponame'),         this.gitreponame;      
+    this.config.set('gitreponame'),         this.gitreponame;  
+    this.config.set('packageFolder'),        this.packageFolder;
 };
 
 function dodockerkafka(thing) {
@@ -218,6 +218,25 @@ function doapp(thing, interpolateRegex) {
     thing.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaGeneratedDir + 'domain/util/CustomDateTimeSerializer.java', thing, {});
     thing.template('src/main/java/package/domain/util/_CustomDateTimeDeserializer.java', javaGeneratedDir + 'domain/util/CustomDateTimeDeserializer.java', thing, {});
     thing.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaGeneratedDir + 'domain/util/ISO8601LocalDateDeserializer.java', thing, {});
+}
+
+function doJbehave(thing, packageFolder) {
+
+    var srcJavaDir = 'src/jbehave/java/package/jbehave/';
+    var targetJavaDir = 'src/jbehave/java/' + packageFolder + '/jbehave/';
+
+    thing.template(srcJavaDir + '_AbstractSpringJBehaveStory.java',       targetJavaDir + 'AbstractSpringJBehaveStory.java', thing, {});
+    thing.template(srcJavaDir + '_AcceptanceTest.java',                   targetJavaDir + 'AcceptanceTest.java', thing, {});
+    thing.template(srcJavaDir + '_AcceptanceTestsConfiguration.java',     targetJavaDir + 'AcceptanceTestsConfiguration.java', thing, {});
+    thing.template(srcJavaDir + '_Steps.java',                            targetJavaDir + 'Steps.java', thing, {});
+
+    var srcGroovyPackage = 'src/jbehave/groovy/package/jbehave/facade/';
+    var targetGroovyPackage = 'src/jbehave/groovy/' + packageFolder + '/jbehave/facade/';
+    thing.template(srcGroovyPackage + '_ExampleOfHowToBehave.groovy',     targetGroovyPackage + 'ExampleOfHowToBehave.groovy', thing, {}); 
+
+    var srcStoryPackage = 'src/jbehave/stories/package/jbehave/facade/';
+    var targetStoryPackage = 'src/jbehave/stories/' + packageFolder + '/jbehave/facade/';
+    thing.template( srcStoryPackage + '_example_of_how_to_behave.story',     targetStoryPackage  + 'example_of_how_to_behave.story', thing, {}); 
 }
 
 
