@@ -78,9 +78,7 @@ SianGenerator.prototype.askFor = function askFor() {
             'to re-generate the project...\n'));
         cb();
     } else {
-        console.log("2");
         this.prompt(prompts, function (props) {
-            console.log("3");
             if (props.insight !== undefined) {
                 insight.optOut = !props.insight;
             }
@@ -96,7 +94,6 @@ SianGenerator.prototype.askFor = function askFor() {
 };
 
 SianGenerator.prototype.app = function app() {
-    console.log("made it here");
     var insight = this.insight();
     insight.track('generator', 'app');
 
@@ -112,6 +109,7 @@ SianGenerator.prototype.app = function app() {
     this.slugifiedBaseName = _.slugify(this.baseName);
     
     doroot(this);
+    dodocs(this);
     dogradlew(this);
     dogradle(this);
     doapp(this);
@@ -123,43 +121,49 @@ SianGenerator.prototype.app = function app() {
     this.config.set('gitreponame'),         this.gitreponame;      
 };
 
+function dodocs(thing ) {
+    thing.template('_README.md',                'README.md', thing, {});
+    thing.template('docs/_pipeline.md',         'docs/pipeline.md', thing, {});
+    thing.template('docs/_developersetup.md',   'docs/developersetup.md', thing, {});
+}
 
 function doconcourse(thing) {
 
-    thing.template('_pipeline.yml', 'pipeline.yml', thing, {});
-    thing.copy('credentials.example.yml', 'credentials.yml');
-    thing.template('ci/tasks/_package.yml','ci/tasks/package.yml', thing, {});
-    thing.template('ci/scripts/_package.sh','ci/scripts/package.sh', thing, {});
-    thing.template('_Dockerfile','Dockerfile', thing, {});
+    thing.template('_pipeline.yml',             'pipeline.yml', thing, {});
+    thing.copy('credentials.example.yml',       'credentials.yml');
+    thing.template('ci/tasks/_package.yml',     'ci/tasks/package.yml', thing, {});
+    thing.template('ci/scripts/_package.sh',    'ci/scripts/package.sh', thing, {});
+    thing.template('_Dockerfile',               'Dockerfile', thing, {});
 }
 
 function doroot(thing) {
-    thing.template('_README.md', 'README.md', thing, {});
-    thing.copy('.gitignore','.gitignore');
-    thing.copy('LICENSE','LICENSE');
-    thing.template('_Vagrantfile', 'Vagrantfile', thing, {});
+    thing.template('_README.md',                'README.md', thing, {});
+    thing.copy('.gitignore',                    '.gitignore');
+    thing.copy('LICENSE',                       'LICENSE');
+    thing.template('_Vagrantfile',              'Vagrantfile', thing, {});
 }
 
 function dogradlew(thing) {
-    thing.copy('gradlew','gradlew');
-    thing.copy('gradlew.bat','gradlew.bat');
-    thing.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
-    thing.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
+    thing.copy('gradlew',                                   'gradlew');
+    thing.copy('gradlew.bat',                               'gradlew.bat');
+    thing.copy('gradle/wrapper/gradle-wrapper.jar',         'gradle/wrapper/gradle-wrapper.jar');
+    thing.copy('gradle/wrapper/gradle-wrapper.properties',  'gradle/wrapper/gradle-wrapper.properties');
 }
 
 function dogradle(thing) {
 
-    thing.copy('build.gradle', 'build.gradle');
-    thing.template('_gradle.properties','gradle.properties', thing, {});
-    thing.template('_settings.gradle', 'settings.gradle', thing, {});
-    thing.copy('gradle/conf/profiles/profile_dev.gradle', 'gradle/conf/profiles/profile_dev.gradle');
-    thing.copy('gradle/conf/profiles/profile_prod.gradle', 'gradle/conf/profiles/profile_prod.gradle');
-    thing.copy('gradle/conf/profiles/profile_fast.gradle', 'gradle/conf/profiles/profile_fast.gradle');
+    thing.copy('build.gradle',                              'build.gradle');
+    thing.template('_gradle.properties',                    'gradle.properties', thing, {});
+    thing.template('_settings.gradle',                      'settings.gradle', thing, {});
+    thing.copy('gradle/conf/profiles/profile_dev.gradle',   'gradle/conf/profiles/profile_dev.gradle');
+    thing.copy('gradle/conf/profiles/profile_prod.gradle',  'gradle/conf/profiles/profile_prod.gradle');
+    thing.copy('gradle/conf/profiles/profile_fast.gradle',  'gradle/conf/profiles/profile_fast.gradle');
 
     // *** runtime
     thing.copy('gradle/conf/boot.gradle',               'gradle/conf/boot.gradle');
     thing.copy('gradle/conf/groovy.gradle',             'gradle/conf/groovy.gradle');
     thing.copy('gradle/conf/jackson.gradle',            'gradle/conf/jackson.gradle');
+    thing.copy('gradle/conf/kafka.gradle',              'gradle/conf/kafka.gradle');
     thing.copy('gradle/conf/lombok.gradle',             'gradle/conf/lombok.gradle');
     thing.copy('gradle/conf/meta.gradle',               'gradle/conf/meta.gradle');
     thing.copy('gradle/conf/spring-cloud.gradle',       'gradle/conf/spring-cloud.gradle');
@@ -178,7 +182,7 @@ function dogradle(thing) {
 }
 
 function doapp(thing, interpolateRegex) {
-    var javaGeneratedDir = 'src/main/java/' + thing.packageName + '/generated/';
+    var javaGeneratedDir = 'src/main/java/' + thing.packageFolder + '/generated/';
     var resourceDir = 'src/main/resources/';
     var interpolateRegex = /<%=([\s\S]+?)%>/g;
 
@@ -193,7 +197,7 @@ function doapp(thing, interpolateRegex) {
     thing.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml', thing, {});
     
     // Code
-    thing.template('src/main/java/package/_Application.java',     'src/main/java/'+ thing.packageName +'/Application.java', thing, {});
+    thing.template('src/main/java/package/_Application.java',     'src/main/java/'+ thing.packageFolder +'/Application.java', thing, {});
     thing.template('src/main/java/package/config/_Constants.java', javaGeneratedDir + 'config/Constants.java', thing, {});
     thing.template('src/main/java/package/config/apidoc/_SwaggerConfiguration.java', javaGeneratedDir + 'config/apidoc/SwaggerConfiguration.java', thing, {});
     thing.template('src/main/java/package/config/_JacksonConfiguration.java', javaGeneratedDir + 'config/JacksonConfiguration.java', thing, {});
@@ -202,8 +206,6 @@ function doapp(thing, interpolateRegex) {
     thing.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaGeneratedDir + 'domain/util/CustomDateTimeSerializer.java', thing, {});
     thing.template('src/main/java/package/domain/util/_CustomDateTimeDeserializer.java', javaGeneratedDir + 'domain/util/CustomDateTimeDeserializer.java', thing, {});
     thing.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaGeneratedDir + 'domain/util/ISO8601LocalDateDeserializer.java', thing, {});
-
-
 }
 
 
