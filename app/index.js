@@ -113,7 +113,9 @@ SianGenerator.prototype.app = function app() {
     doconcourse(this);
     dodockerkafka(this);
     doJbehave(this, this.packageFolder); 
-
+    doIntegrationTest(this);
+    doFunctional(this, this.packageFolder);
+    dotest(this);
 
     this.config.set('baseName',             this.baseName);
     this.config.set('packageName',          this.packageName);
@@ -121,6 +123,28 @@ SianGenerator.prototype.app = function app() {
     this.config.set('gitreponame'),         this.gitreponame;  
     this.config.set('packageFolder'),        this.packageFolder;
 };
+
+function dotest(thing) {
+    var testResourceDir = 'src/test/resources/';
+    thing.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml', thing, {});
+    thing.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml', thing, {});
+    thing.copy('src/test/groovy/placeholder','src/test/groovy/placeholder');
+}
+
+function doFunctional(thing, packageFolder) {
+    var srcFolder  = 'src/functional/groovy/package/functional/';
+    var destFolder = 'src/functional/groovy/' + packageFolder + '/functional/';
+    thing.copy('gradle/conf/test/restassured.gradle', 'gradle/conf/test/restassured.gradle');
+    thing.template(srcFolder + '_AbstractFunctionTest.groovy', 
+        destFolder + 'AbstractFunctionTest.groovy', thing, {});
+}
+
+
+function doIntegrationTest(thing) {
+    var groovyItTest = 'src/integration/groovy/' + thing.packageFolder + '/it/';
+    thing.template('src/integration/groovy/package/it/_AbstractItTest.groovy', groovyItTest + 'AbstractItTest.groovy', thing, {});
+    
+}
 
 function dodockerkafka(thing) {
     thing.copy('docker-kafka/broker-list.sh',                       'docker-kafka/broker-list.sh');
