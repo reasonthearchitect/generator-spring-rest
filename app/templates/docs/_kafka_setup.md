@@ -7,7 +7,9 @@ This section will guide the user through the set up and configuration of their e
 In order to leverage docker locally, you will need to install VirtualBox and Docker:
 
 *[VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
 *[Docker for Mac](https://docs.docker.com/engine/installation/mac/)
+
 *[Docker for Windows](https://docs.docker.com/engine/installation/windows/)
 
 
@@ -36,6 +38,7 @@ In order to test the system, you will need to install the kafka distribution 0.1
 Scala:
 
 * [For Mac Users](http://sourabhbajaj.com/mac-setup/Scala/README.html)
+
 * [For Windows Users](http://www.scala-lang.org/download/install.html)
 
 Kafka:
