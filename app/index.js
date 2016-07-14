@@ -114,6 +114,7 @@ SianGenerator.prototype.app = function app() {
     dogradle(this);
     doapp(this);
     doconcourse(this);
+    dodockerkafka(this);
 
     this.config.set('baseName',             this.baseName);
     this.config.set('packageName',          this.packageName);
@@ -121,10 +122,19 @@ SianGenerator.prototype.app = function app() {
     this.config.set('gitreponame'),         this.gitreponame;      
 };
 
-function dodocs(thing ) {
+function dodockerkafka(thing) {
+    thing.copy('docker-kafka/broker-list.sh',                       'docker-kafka/broker-list.sh');
+    thing.copy('docker-kafka/create-topics.sh',                     'docker-kafka/create-topics.sh');
+    thing.copy('docker-kafka/docker-compose-single-broker.yml',     'docker-kafka/docker-compose-single-broker.yml');
+    thing.copy('docker-kafka/Dockerfile',                           'docker-kafka/Dockerfile');
+    thing.copy('docker-kafka/download-kafka.sh',                    'docker-kafka/download-kafka.sh');
+    thing.copy('docker-kafka/start-kafka.sh',                       'docker-kafka/start-kafka.sh');
+}
+
+function dodocs(thing) {
     thing.template('_README.md',                'README.md', thing, {});
     thing.template('docs/_pipeline.md',         'docs/pipeline.md', thing, {});
-    thing.template('docs/_developersetup.md',   'docs/developersetup.md', thing, {});
+    thing.template('docs/_kafkaSetup.md',       'docs/kafkaSetup.md', thing, {});
 }
 
 function doconcourse(thing) {
