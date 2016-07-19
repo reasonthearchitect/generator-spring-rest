@@ -47,7 +47,7 @@ Kafka:
 
 ### Test
 
-```
+``` 
 Note that the following has been tested on Mac... You may need to change the '*.sh' for '*.bat' on windows.
 ```
 
