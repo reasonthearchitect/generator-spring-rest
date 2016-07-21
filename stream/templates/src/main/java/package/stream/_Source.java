@@ -7,7 +7,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 
-import <%=packageName%>.dto.<%= entityClass %>Dto;
+import <%=packageName%>.dto.<%= sourceDtoClass %>Dto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.java.Log;
@@ -18,19 +18,19 @@ import lombok.extern.java.Log;
 public class <%= entityClass %>Source {
 
         @Autowired @Qualifier("<%=  sourceName %>")
-        private MessageChannel post<%= entityClass %>;
+        private MessageChannel post<%= sourceDtoInstance %>;
 
         @Autowired
         ObjectMapper mapper;
 
-        public void send<%= entityClass %>(<%= entityClass %>Dto <%= entityInstance %>Dto) {
+        public void send<%= sourceDtoInstance %>(<%= sourceDtoClass %>Dto <%= sourceDtoInstance %>Dto) {
                 try {
                         Message<?> message = MessageBuilder.withPayload(
-                                        mapper.writerWithDefaultPrettyPrinter().writeValueAsString(<%= entityInstance %>Dto)
+                                        mapper.writerWithDefaultPrettyPrinter().writeValueAsString(<%= sourceDtoInstance %>Dto)
                                 )
                                 .setHeader("content-type", "application/json")
                                 .build();
-                        post<%= entityClass %>.send(message);
+                        post<%= sourceDtoInstance %>.send(message);
                 } catch (Exception ex) {
                         log.error("Error trying to send a message to a queue: ", ex);
                 }        

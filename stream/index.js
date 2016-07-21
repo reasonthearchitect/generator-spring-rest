@@ -75,6 +75,19 @@ StreamGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
+                return response.channelType == 'sink' || response.channelType == 'processor';
+            },
+            type: 'input',
+            name: 'sinkDto',
+            validate: function (input) {
+                if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+                return 'Your name cannot contain special characters or a blank space, using the default name instead';
+            },
+            message: '(4/' + questions + ') What is the Sink message object called?'
+            
+        },
+        {
+            when: function (response) {
                 return response.channelType == 'source' || response.channelType == 'processor';
             },
             type: 'input',
@@ -83,7 +96,20 @@ StreamGenerator.prototype.askForFields = function askForFields() {
                 if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
                 return 'Your name cannot contain special characters or a blank space, using the default name instead';
             },
-            message: '(4/' + questions + ') What do you want to call the output message queue?'
+            message: '(5/' + questions + ') What do you want to call the output message queue?'
+            
+        },
+        {
+            when: function (response) {
+                return response.channelType == 'source' || response.channelType == 'processor';
+            },
+            type: 'input',
+            name: 'sourceDto',
+            validate: function (input) {
+                if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+                return 'Your name cannot contain special characters or a blank space, using the default name instead';
+            },
+            message: '(6/' + questions + ') What is the Source message object called??'
             
         },
         {
@@ -92,23 +118,7 @@ StreamGenerator.prototype.askForFields = function askForFields() {
             },
             type: 'list',
             name: 'generateRest',
-            message: '(5/' + questions + ') Do you want a Rest endpoint generated?',
-            choices: [
-                {
-                    value: 'yes',
-                    name: 'Yes'
-                },
-                {
-                    value: 'no',
-                    name: 'No'
-                }
-            ],
-            default: 0
-        },
-        {
-            type: 'list',
-            name: 'generateDto',
-            message: '(6/' + questions + ') Do you want the DTO generated? Note that this DTO will be used as the object for the stream endpoints.',
+            message: '(7/' + questions + ') Do you want a Rest endpoint generated?',
             choices: [
                 {
                     value: 'yes',
@@ -130,13 +140,20 @@ StreamGenerator.prototype.askForFields = function askForFields() {
     this.entityClass        = _.capitalize(this.name);
     this.entityInstance     = _.decapitalize(this.name);
 
+    
+
 	this.prompt(prompts, function (props) {
         this.channelType        = props.channelType;
         this.groupName          = props.groupName
         this.sinkName           = props.sinkName;
         this.sourceName         = props.sourceName;
         this.generateRest       = props.generateRest;
-        this.generateDto        = props.generateDto;
+        
+        this.sinkDtoClass      = _.capitalize(props.sinkDto);
+        this.sinkDtoInstance   = _.decapitalize(props.sinkDto);
+    
+        this.sourceDtoClass     = _.capitalize(props.sourceDto);
+        this.sourceDtoInstance  = _.decapitalize(props.sourceDto);
         cb();
     }.bind(this));
 };
@@ -145,10 +162,6 @@ StreamGenerator.prototype.buildStack = function buildStack() {
     this.packageFolder = this.packageName.replace(/\./g, '/');
 
     this.template('src/main/java/package/stream/_MetaData.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'MetaData.java', this, {});
-
-    if (this.generateDto == 'yes' ) {
-        this.template('src/main/java/package/dto/_Dto.java',     'src/main/java/'+ this.packageFolder +'/dto/' + this.entityClass + 'Dto.java', this, {});
-    }
 
     if (this.channelType == 'sink') {
         this.template('src/main/java/package/stream/_Sink.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'Sink.java', this, {});
