@@ -148,7 +148,7 @@ StreamGenerator.prototype.askForFields = function askForFields() {
         this.sinkName           = props.sinkName;
         this.sourceName         = props.sourceName;
         this.generateRest       = props.generateRest;
-        
+
         this.sinkDtoClass      = _.capitalize(props.sinkDto);
         this.sinkDtoInstance   = _.decapitalize(props.sinkDto);
     
@@ -161,7 +161,7 @@ StreamGenerator.prototype.askForFields = function askForFields() {
 StreamGenerator.prototype.buildStack = function buildStack() {
     this.packageFolder = this.packageName.replace(/\./g, '/');
 
-    this.template('src/main/java/package/stream/_MetaData.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'MetaData.java', this, {});
+    this.template('src/main/java/package/stream/_MetaData.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'Metadata.java', this, {});
 
     if (this.channelType == 'sink') {
         this.template('src/main/java/package/stream/_Sink.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'Sink.java', this, {});
@@ -176,7 +176,7 @@ StreamGenerator.prototype.buildStack = function buildStack() {
     }
 
     if (this.generateRest == 'yes') {
-        this.template('src/main/java/package/stream/_Rest.java',     'src/main/java/'+ this.packageFolder +'/rest/' + this.entityClass + 'Rest.java', this, {});
+        this.template('src/main/java/package/rest/_Rest.java',     'src/main/java/'+ this.packageFolder +'/rest/' + this.entityClass + 'Rest.java', this, {});
     }
 };
 

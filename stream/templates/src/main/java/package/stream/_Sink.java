@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 
-import <%=packageName%>.dto.<%= sinkDtoClass %>Dto;
+import <%=packageName%>.dto.<%= sinkDtoClass %>;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.logging.Level;
 import lombok.extern.java.Log;
 
+@Log
 @EnableBinding(<%= entityClass %>Metadata.class)
 public class <%= entityClass %>Sink {
 
@@ -20,9 +22,9 @@ public class <%= entityClass %>Sink {
     public void sink(<%= sinkDtoClass %> <%= sinkDtoInstance %>) {
         
         try {
-            log.error(this.mapper.writerWithDefaultPrettyPrinter().writeValueAsString(<%= sinkDtoInstance %>));
+            log.log(Level.INFO, this.mapper.writerWithDefaultPrettyPrinter().writeValueAsString(<%= sinkDtoInstance %>));
         } catch (Exception ex) {
-            log.error("Exception thrown and could not map.", ex);
+            log.log(Level.SEVERE, "Exception thrown and could not map.", ex);
         }
     }
 }

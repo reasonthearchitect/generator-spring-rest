@@ -5,8 +5,8 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 
-import <%=packageName%>.dto.<%= sinkDtoClass %>Dto;
-import <%=packageName%>.dto.<%= sourceDtoClass %>Dto;
+import <%=packageName%>.dto.<%= sinkDtoClass %>;
+import <%=packageName%>.dto.<%= sourceDtoClass %>;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.java.Log;
@@ -17,7 +17,7 @@ public class <%= entityClass %>Processor {
 
 	@StreamListener("<%= sinkName %>")
   	@SendTo("<%=  sourceName %>")
-  	public <%= sourceDtoClass %>Dto handle(<%= sinkDtoClass %>Dto <%= sinkDtoInstance %>Dto) {
-    	return new <%= sourceDtoClass %>Dto();
+  	public <%= sourceDtoClass %> handle(<%= sinkDtoClass %> <%= sinkDtoInstance %>) {
+    	return new <%= sourceDtoClass %>();
   	}
 }

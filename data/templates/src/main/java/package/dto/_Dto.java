@@ -1,5 +1,6 @@
 package <%=packageName%>.dto;
 
+import java.math.BigDecimal;
 import lombok.Data;
 
 @Data

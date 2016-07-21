@@ -1,16 +1,5 @@
-apply plugin: 'sonar-runner'
-apply plugin: 'jacoco'
-
-jacoco {
-    toolVersion = jacoco_tools_version
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
+sonarqube {
+    properties {
+        property "sonar.exclusions", "**/generated/**/*.java"
     }
-}
-
-sonarRunner {
-    toolVersion = sonar_tool_version
 }

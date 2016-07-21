@@ -203,7 +203,7 @@ function dogradle(thing) {
     thing.copy('gradle/conf/lombok.gradle',             'gradle/conf/lombok.gradle');
     thing.copy('gradle/conf/meta.gradle',               'gradle/conf/meta.gradle');
     thing.copy('gradle/conf/spring-cloud.gradle',       'gradle/conf/spring-cloud.gradle');
-    
+    thing.copy('gradle/conf/streams.gradle',            'gradle/conf/streams.gradle');
     // Set up and stuff.
     thing.copy('gradle/conf/ide.gradle',                'gradle/conf/ide.gradle');
     thing.copy('gradle/conf/metrics.gradle',            'gradle/conf/metrics.gradle');
