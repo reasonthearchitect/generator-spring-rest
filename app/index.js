@@ -157,11 +157,11 @@ function dodockerkafka(thing) {
 
 function dodocs(thing) {
     thing.template('_README.md',                 'README.md', thing, {});
-    thing.template('docs/_pipeline_setup.md',    'docs/pipeline_setup.md', thing, {});
-    thing.template('docs/_kafka_setup.md',       'docs/kafka_setup.md', thing, {});
     thing.template('docs/_dev_env_setup.md',     'docs/dev_env_setup.md', thing, {});
     thing.template('docs/_dev_project_setup.md', 'docs/dev_project_setup.md', thing, {});
-
+    thing.template('docs/_kafka_setup.md',       'docs/kafka_setup.md', thing, {});
+    thing.template('docs/_pipeline_setup.md',    'docs/pipeline_setup.md', thing, {});
+    thing.template('docs/_streams.md',           'docs/steams.md', thing, {});
 }
 
 function doconcourse(thing) {
