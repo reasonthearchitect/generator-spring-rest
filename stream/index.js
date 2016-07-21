@@ -28,7 +28,7 @@ util.inherits(StreamGenerator, scriptBase);
 StreamGenerator.prototype.askForFields = function askForFields() {
 
 	var cb = this.async();
-	var questions = 2;
+	var questions = 6;
 	var prompts = [
         {
             type: 'input',
@@ -87,9 +87,28 @@ StreamGenerator.prototype.askForFields = function askForFields() {
             
         },
         {
+            when: function (response) {
+                return response.channelType == 'source';
+            },
+            type: 'list',
+            name: 'generateRest',
+            message: '(5/' + questions + ') Do you want a Rest endpoint generated?',
+            choices: [
+                {
+                    value: 'yes',
+                    name: 'Yes'
+                },
+                {
+                    value: 'no',
+                    name: 'No'
+                }
+            ],
+            default: 0
+        },
+        {
             type: 'list',
             name: 'generateDto',
-            message: '(5/' + questions + ') Do you want the DTO generated? Note that this DTO will be used as the object for the stream endpoints.',
+            message: '(6/' + questions + ') Do you want the DTO generated? Note that this DTO will be used as the object for the stream endpoints.',
             choices: [
                 {
                     value: 'yes',
@@ -116,6 +135,7 @@ StreamGenerator.prototype.askForFields = function askForFields() {
         this.groupName          = props.groupName
         this.sinkName           = props.sinkName;
         this.sourceName         = props.sourceName;
+        this.generateRest       = props.generateRest;
         this.generateDto        = props.generateDto;
         cb();
     }.bind(this));
@@ -140,6 +160,10 @@ StreamGenerator.prototype.buildStack = function buildStack() {
 
     if (this.channelType == 'processor') {
         this.template('src/main/java/package/stream/_Processor.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'Processor.java', this, {});
+    }
+
+    if (this.generateRest == 'yes') {
+        this.template('src/main/java/package/stream/_Rest.java',     'src/main/java/'+ this.packageFolder +'/rest/' + this.entityClass + 'Rest.java', this, {});
     }
 };
 

@@ -8,6 +8,12 @@ buildscript {
     }
 }
 
+dependencyManagement {
+    imports { 
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR3" 
+    }
+}
+
 configurations {
   all*.exclude group: 'commons-logging'
 }
@@ -20,6 +26,7 @@ apply from: 'gradle/conf/lombok.gradle'
 apply from: 'gradle/conf/meta.gradle'
 apply from: 'gradle/conf/metrics.gradle'
 apply from: 'gradle/conf/spring-cloud.gradle'
+apply from: 'gradle/conf/streams.gradle'
 apply from: 'gradle/conf/utils.gradle'
 
 apply from: 'gradle/conf/test/integration.gradle'
