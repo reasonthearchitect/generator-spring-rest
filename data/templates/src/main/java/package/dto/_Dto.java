@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
-public class <%= entityClass %>Dto {
+public class <%= entityClass %> {
 <% for (fieldId in fields) { %>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
 <% } %>

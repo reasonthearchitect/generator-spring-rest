@@ -266,7 +266,7 @@ EntityGenerator.prototype.files = function files() {
     this.packageFolder = this.packageName.replace(/\./g, '/');
 
     this.template('src/main/java/package/dto/_Dto.java',
-        'src/main/java/' + this.packageFolder + '/dto/' + this.entityClass + 'Dto.java', this, {});
+        'src/main/java/' + this.packageFolder + '/dto/' + this.entityClass + '.java', this, {});
 };
 
 EntityGenerator.prototype.getTableName = function(value) {

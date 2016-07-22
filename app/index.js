@@ -61,15 +61,25 @@ SianGenerator.prototype.askFor = function askFor() {
                 return 'Not a valid Git URL';
             },
             message: '(3/' + questions + ') What is the parent git repo name?',
-            default: 'reasonthearchitect/<change-me>'
+            default: 'change/me'
+        },
+        {
+            type: 'input',
+            name: 'port',
+            validate: function (input) {
+                if (/^([0-9_]*)$/.test(input)) return true;
+                return 'Not a valid port';
+            },
+            message: '(4/' + questions + ') What port would you like to use?',
+            default: '8080'
         }
-
     ];
 
     this.baseName               = this.config.get('baseName');
     this.packageName            = this.config.get('packageName');
     this.gitreponame            = this.config.get('gitreponame')
     this.packageNameGenerated   = this.config.get('packageNameGenerated');
+    this.port                   = this.config.get('port');
 
     if (this.baseName != null &&
         this.packageName != null
@@ -85,6 +95,7 @@ SianGenerator.prototype.askFor = function askFor() {
             this.baseName               = props.baseName;
             this.packageName            = props.packageName;
             this.gitreponame            = props.gitreponame;
+            this.port                   = props.port;
             var generated               = ".generated";
             this.packageNameGenerated   = props.packageName +  generated;
             
@@ -121,7 +132,8 @@ SianGenerator.prototype.app = function app() {
     this.config.set('packageName',          this.packageName);
     this.config.set('packageNameGenerated', this.packageNameGenerated);
     this.config.set('gitreponame'),         this.gitreponame;  
-    this.config.set('packageFolder'),        this.packageFolder;
+    this.config.set('packageFolder'),       this.packageFolder;
+    this.config.set('port'),                this.port;
 };
 
 function dotest(thing) {

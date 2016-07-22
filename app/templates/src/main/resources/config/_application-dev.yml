@@ -2,7 +2,7 @@ management.security.enabled: false
 security.basic.enabled: false
 
 server:
-    port: 8080
+    port: <%= port %>
 
 liquibase:
     context: dev
