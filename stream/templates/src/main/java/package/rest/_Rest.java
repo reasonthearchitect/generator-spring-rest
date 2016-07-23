@@ -1,4 +1,4 @@
-package <%=packageName%>.rest;
+package <%=packageName%>.rest; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

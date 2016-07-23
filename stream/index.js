@@ -169,6 +169,7 @@ StreamGenerator.prototype.buildStack = function buildStack() {
 
     if (this.channelType == 'source') {
         this.template('src/main/java/package/stream/_Source.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'Source.java', this, {});
+        this.template('src/test/groovy/package/test/stream/_SourceSpec.groovy', 'src/test/groovy/'+ this.packageFolder +'/test/stream/' + this.entityClass + 'SourceSpec.groovy', this, {});
     }
 
     if (this.channelType == 'processor') {
@@ -176,7 +177,8 @@ StreamGenerator.prototype.buildStack = function buildStack() {
     }
 
     if (this.generateRest == 'yes') {
-        this.template('src/main/java/package/rest/_Rest.java',     'src/main/java/'+ this.packageFolder +'/rest/' + this.entityClass + 'Rest.java', this, {});
+        this.template('src/main/java/package/rest/_Rest.java',              'src/main/java/'+ this.packageFolder +'/rest/' + this.entityClass + 'Rest.java', this, {});
+        this.template('src/test/groovy/package/test/rest/_RestSpec.groovy', 'src/test/groovy/'+ this.packageFolder +'/test/rest/' + this.entityClass + 'RestSpec.groovy', this, {});
     }
 };
 
