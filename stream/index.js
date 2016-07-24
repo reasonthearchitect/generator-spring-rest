@@ -165,6 +165,7 @@ StreamGenerator.prototype.buildStack = function buildStack() {
 
     if (this.channelType == 'sink') {
         this.template('src/main/java/package/stream/_Sink.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'Sink.java', this, {});
+        this.template('src/test/groovy/package/test/stream/_SinkSpec.groovy', 'src/test/groovy/'+ this.packageFolder +'/test/stream/' + this.entityClass + 'SinkSpec.groovy', this, {});
     }
 
     if (this.channelType == 'source') {
@@ -174,6 +175,7 @@ StreamGenerator.prototype.buildStack = function buildStack() {
 
     if (this.channelType == 'processor') {
         this.template('src/main/java/package/stream/_Processor.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'Processor.java', this, {});
+        this.template('src/test/groovy/package/test/stream/_ProcessorSpec.groovy', 'src/test/groovy/'+ this.packageFolder +'/test/stream/' + this.entityClass + 'ProcessorSpec.groovy', this, {});
     }
 
     if (this.generateRest == 'yes') {
