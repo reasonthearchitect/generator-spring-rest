@@ -1,16 +1,17 @@
 'use strict'; 
-var util = require('util'),
-    path = require('path'),
-    yeoman = require('yeoman-generator'),
-    chalk = require('chalk'),
-    _ = require('underscore.string'),
-    shelljs = require('shelljs'),
-    scriptBase = require('../script-base'),
-    packagejs = require(__dirname + '/../package.json'),
-    crypto = require("crypto"),
-    mkdirp = require('mkdirp'),
-    html = require("html-wiring"),
-    ejs = require('ejs');
+var util        = require('util'),
+    path        = require('path'),
+    yeoman      = require('yeoman-generator'),
+    chalk       = require('chalk'),
+    _           = require('underscore.string'),
+    shelljs     = require('shelljs'),
+    scriptBase  = require('../script-base'),
+    packagejs   = require(__dirname + '/../package.json'),
+    crypto      = require("crypto"),
+    mkdirp      = require('mkdirp'),
+    html        = require("html-wiring"),
+    ejs         = require('ejs'),
+    figlet      = require('figlet');
 
 var SianGenerator = module.exports = function SianGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
@@ -23,14 +24,11 @@ util.inherits(SianGenerator, scriptBase);
 SianGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
-    console.log(chalk.red('\n' +
-        '              _    __    _       __        ___   ____  _      __        \n' +
-        '             | |  / /\\  \\ \\  /  / /\\      | | \\ | |_  \\ \\  / ( (`       \n' +
-        '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
+    console.log(chalk.yellow(figlet.textSync('Spring Stream: Init', { horizontalLayout: 'full' })));
 
     console.log('\nWelcome to the Sian Generator v' + packagejs.version + '\n');
     var insight = this.insight();
-    var questions = 2; // making questions a variable to avoid updating each question by hand when adding additional options
+    var questions = 5; // making questions a variable to avoid updating each question by hand when adding additional options
 
      var prompts = [
         {
@@ -54,13 +52,29 @@ SianGenerator.prototype.askFor = function askFor() {
             default: 'com.tek.myservice'
         },
         {
+            type: 'list',
+            name: 'adddocker',
+            message: '(3/' + questions + ') Do you want to add Docker to the project?',
+            choices: [
+                {
+                    value: 'yes',
+                    name: 'Yes'
+                },
+                {
+                    value: 'no',
+                    name: 'No'
+                }
+            ],
+            default: 0
+        },
+        {
             type: 'input',
             name: 'gitreponame',
             validate: function (input) {
                 if (/^([a-zA-Z0-9_]*\/[a-zA-Z0-9_]*)$/.test(input)) return true;
                 return 'Not a valid Git URL';
             },
-            message: '(3/' + questions + ') What is the parent git repo name?',
+            message: '(4/' + questions + ') What is the parent git repo name?',
             default: 'change/me'
         },
         {
@@ -70,13 +84,14 @@ SianGenerator.prototype.askFor = function askFor() {
                 if (/^([0-9_]*)$/.test(input)) return true;
                 return 'Not a valid port';
             },
-            message: '(4/' + questions + ') What port would you like to use?',
+            message: '(5/' + questions + ') What port would you like to use?',
             default: '8080'
         }
     ];
 
     this.baseName               = this.config.get('baseName');
     this.packageName            = this.config.get('packageName');
+    this.adddocker              = this.config.get('adddocker');
     this.gitreponame            = this.config.get('gitreponame')
     this.packageNameGenerated   = this.config.get('packageNameGenerated');
     this.port                   = this.config.get('port');
@@ -95,6 +110,7 @@ SianGenerator.prototype.askFor = function askFor() {
             this.baseName               = props.baseName;
             this.packageName            = props.packageName;
             this.gitreponame            = props.gitreponame;
+            this.adddocker              = props.adddocker;
             this.port                   = props.port;
             var generated               = ".generated";
             this.packageNameGenerated   = props.packageName +  generated;
@@ -131,6 +147,7 @@ SianGenerator.prototype.app = function app() {
     this.config.set('baseName',             this.baseName);
     this.config.set('packageName',          this.packageName);
     this.config.set('packageNameGenerated', this.packageNameGenerated);
+    this.config.set('adddocker',            this.adddocker);
     this.config.set('gitreponame'),         this.gitreponame;  
     this.config.set('packageFolder'),       this.packageFolder;
     this.config.set('port'),                this.port;
@@ -182,7 +199,10 @@ function doconcourse(thing) {
     thing.copy('credentials.example.yml',       'credentials.yml');
     thing.template('ci/tasks/_package.yml',     'ci/tasks/package.yml', thing, {});
     thing.template('ci/scripts/_package.sh',    'ci/scripts/package.sh', thing, {});
-    thing.template('_Dockerfile',               'Dockerfile', thing, {});
+
+    if (thing.adddocker == "yes") {
+        thing.template('_Dockerfile',               'Dockerfile', thing, {});    
+    }
 }
 
 function doroot(thing) {

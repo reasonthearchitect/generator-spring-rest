@@ -8,7 +8,8 @@ var util = require('util'),
         _s = require('underscore.string'),
         shelljs = require('shelljs'),
         html = require("html-wiring"),
-        scriptBase = require('../script-base');
+        scriptBase = require('../script-base'),
+        figlet      = require('figlet');
 
 var reservedWords_Java = ["ABSTRACT", "CONTINUE", "FOR", "NEW", "SWITCH", "ASSERT", "DEFAULT", "GOTO", "PACKAGE", "SYNCHRONIZED", "BOOLEAN", "DO", "IF", "PRIVATE", "THIS", "BREAK", "DOUBLE", "IMPLEMENTS", "PROTECTED", "THROW", "BYTE", "ELSE", "IMPORT", "PUBLIC", "THROWS", "CASE", "ENUM", "INSTANCEOF", "RETURN", "TRANSIENT", "CATCH", "EXTENDS", "INT", "SHORT", "TRY", "CHAR", "FINAL", "INTERFACE", "STATIC", "VOID", "CLASS", "FINALLY", "LONG", "STRICTFP", "VOLATILE", "CONST", "FLOAT", "NATIVE", "SUPER", "WHILE"];
 
@@ -94,7 +95,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
         console.log(chalk.red('The entity name is too long for Oracle, try a shorter name'));
         throw new Error("Validation error");
     }
-
+    console.log(chalk.yellow(figlet.textSync('Spring Stream: Data', { horizontalLayout: 'full' })));
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
     // Specific Entity sub-generator variables
     this.fieldId = 0;
@@ -117,6 +118,7 @@ util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
 
 EntityGenerator.prototype.askForFields = function askForFields() {
+
     if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
         return;
     }

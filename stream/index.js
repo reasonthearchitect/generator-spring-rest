@@ -1,19 +1,21 @@
 'use strict';
-var util = require('util'),
-    path = require('path'),
-    yeoman = require('yeoman-generator'),
-    chalk = require('chalk'),
-    _ = require('underscore.string'),
-    shelljs = require('shelljs'),
-    scriptBase = require('../script-base'),
-    packagejs = require(__dirname + '/../package.json'),
-    crypto = require("crypto"),
-    mkdirp = require('mkdirp'),
-    html = require("html-wiring"),
-    ejs = require('ejs');
+var util        = require('util'),
+    path        = require('path'),
+    yeoman      = require('yeoman-generator'),
+    chalk       = require('chalk'),
+    _           = require('underscore.string'),
+    shelljs     = require('shelljs'),
+    scriptBase  = require('../script-base'),
+    packagejs   = require(__dirname + '/../package.json'),
+    crypto      = require("crypto"),
+    mkdirp      = require('mkdirp'),
+    html        = require("html-wiring"),
+    ejs         = require('ejs'),
+    figlet      = require('figlet');
 
 var StreamGenerator = module.exports = function StreamGenerator(args, options, config) {
 
+    console.log(chalk.yellow(figlet.textSync('Spring Stream: Stream', { horizontalLayout: 'full' })));
 	yeoman.generators.NamedBase.apply(this, arguments);
 
 	this.baseName = this.config.get('baseName');
