@@ -31,7 +31,8 @@
     "underscore.string": "3.0.3",
     "yeoman-generator": "0.20.3",
     "yo": "1.4.6",
-    "figlet": "^1.1.2"
+    "figlet": "^1.1.2",
+    "clear": "0.0.1"
   },
   "devDependencies": {
     "grunt": "0.4.5",

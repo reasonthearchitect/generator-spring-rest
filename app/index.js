@@ -11,7 +11,8 @@ var util        = require('util'),
     mkdirp      = require('mkdirp'),
     html        = require("html-wiring"),
     ejs         = require('ejs'),
-    figlet      = require('figlet');
+    figlet      = require('figlet'),
+    clear       = require('clear');
 
 var SianGenerator = module.exports = function SianGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
@@ -24,6 +25,8 @@ util.inherits(SianGenerator, scriptBase);
 SianGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
+    clear();
+    
     console.log(chalk.yellow(figlet.textSync('Spring Stream: Init', { horizontalLayout: 'full' })));
 
     console.log('\nWelcome to the Sian Generator v' + packagejs.version + '\n');
@@ -240,6 +243,7 @@ function dogradle(thing) {
     thing.copy('gradle/conf/ide.gradle',                'gradle/conf/ide.gradle');
     thing.copy('gradle/conf/metrics.gradle',            'gradle/conf/metrics.gradle');
     thing.copy('gradle/conf/utils.gradle',              'gradle/conf/utils.gradle');
+    thing.copy('gradle/conf/websockets.gradle',         'gradle/conf/websockets.gradle');
     
     // Testing
     thing.copy('gradle/conf/test/restassured.gradle',   'gradle/conf/test/restassured.gradle');

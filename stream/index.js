@@ -11,9 +11,12 @@ var util        = require('util'),
     mkdirp      = require('mkdirp'),
     html        = require("html-wiring"),
     ejs         = require('ejs'),
-    figlet      = require('figlet');
+    figlet      = require('figlet'),
+    clear       = require('clear');
 
 var StreamGenerator = module.exports = function StreamGenerator(args, options, config) {
+
+    clear();
 
     console.log(chalk.yellow(figlet.textSync('Spring Stream: Stream', { horizontalLayout: 'full' })));
 	yeoman.generators.NamedBase.apply(this, arguments);
@@ -132,17 +135,56 @@ StreamGenerator.prototype.askForFields = function askForFields() {
                 }
             ],
             default: 0
+        },
+        {
+            when: function (response) {
+                return response.channelType == 'sink';
+            },
+            type: 'list',
+            name: 'generateWebSocket',
+            message: '(8/' + questions + ') Do you want a Web Socket generated?',
+            choices: [
+                {
+                    value: 'yes',
+                    name: 'Yes'
+                },
+                {
+                    value: 'no',
+                    name: 'No'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.generateWebSocket == 'yes';
+            },
+            type: 'input',
+            name: 'stompEndpoint',
+            validate: function (input) {
+                if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+                return 'Your stomp cannot contain special characters or a blank space, using the default name instead';
+            },
+            message: '(9/' + questions + ') What is the Stomp endpoint to be called?'
+            
+        },
+        {
+            when: function (response) {
+                return response.generateWebSocket == 'yes';
+            },
+            type: 'input',
+            name: 'brokerName',
+            validate: function (input) {
+                if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+                return 'Your stomp cannot contain special characters or a blank space, using the default name instead';
+            },
+            message: '(10/' + questions + ') What is the broker name to be?'
+            
         }
     ];
 
-
-    // spring.cloud.stream.bindings.input.group
-    // Partisioning.
-
     this.entityClass        = _.capitalize(this.name);
     this.entityInstance     = _.decapitalize(this.name);
-
-    
 
 	this.prompt(prompts, function (props) {
         this.channelType        = props.channelType;
@@ -150,6 +192,9 @@ StreamGenerator.prototype.askForFields = function askForFields() {
         this.sinkName           = props.sinkName;
         this.sourceName         = props.sourceName;
         this.generateRest       = props.generateRest;
+        this.generateWebSocket  = props.generateWebSocket;
+        this.stompEndpoint      = props.stompEndpoint;
+        this.brokerName         = props.brokerName;
 
         this.sinkDtoClass      = _.capitalize(props.sinkDto);
         this.sinkDtoInstance   = _.decapitalize(props.sinkDto);
@@ -165,7 +210,7 @@ StreamGenerator.prototype.buildStack = function buildStack() {
 
     this.template('src/main/java/package/stream/_MetaData.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'Metadata.java', this, {});
 
-    if (this.channelType == 'sink') {
+    if (this.channelType == 'sink' && this.generateWebSocket == 'no') {
         this.template('src/main/java/package/stream/_Sink.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'Sink.java', this, {});
         this.template('src/test/groovy/package/test/stream/_SinkSpec.groovy', 'src/test/groovy/'+ this.packageFolder +'/test/stream/' + this.entityClass + 'SinkSpec.groovy', this, {});
     }
@@ -183,6 +228,10 @@ StreamGenerator.prototype.buildStack = function buildStack() {
     if (this.generateRest == 'yes') {
         this.template('src/main/java/package/rest/_Rest.java',              'src/main/java/'+ this.packageFolder +'/rest/' + this.entityClass + 'Rest.java', this, {});
         this.template('src/test/groovy/package/test/rest/_RestSpec.groovy', 'src/test/groovy/'+ this.packageFolder +'/test/rest/' + this.entityClass + 'RestSpec.groovy', this, {});
+    }
+    if (this.generateWebSocket == 'yes') {
+        this.template('src/main/java/package/stream/_SinkSocket.java',     'src/main/java/'+ this.packageFolder +'/stream/' + this.entityClass + 'SinkSocket.java', this, {});
+        this.template('src/main/java/package/socket/_WebsocketConfiguration.java',              'src/main/java/'+ this.packageFolder +'/socket/WebsocketConfiguration.java', this, {});
     }
 };
 

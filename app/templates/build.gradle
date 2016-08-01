@@ -34,6 +34,7 @@ apply from: 'gradle/conf/metrics.gradle'
 apply from: 'gradle/conf/spring-cloud.gradle'
 apply from: 'gradle/conf/streams.gradle'
 apply from: 'gradle/conf/utils.gradle'
+apply from: 'gradle/conf/websockets.gradle'
 
 apply from: 'gradle/conf/test/integration.gradle'
 apply from: 'gradle/conf/test/unit.gradle'

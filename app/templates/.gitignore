@@ -38,6 +38,7 @@ local.properties
 *.ipr
 *.ids
 *.orig
+out/**
 
 ######################
 # Gradle
