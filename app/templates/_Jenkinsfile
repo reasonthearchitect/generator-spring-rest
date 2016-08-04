@@ -1,0 +1,14 @@
+node {
+    stage 'Checkout'
+    git url: 'https://github.com/<%= gitreponame %>.git'
+
+    stage 'Build'
+    sh "./gradlew clean build"
+    //step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/TEST-*.xml'])
+
+    stage 'BuildRunDocker'
+    //sh 'docker kill <%= baseName %>'
+    //sh 'docker rm <%= baseName %>'
+    sh 'docker build -t <%= dockerrootrepo %>/<%= baseName %> .'
+    sh 'docker run -d --name <%= baseName %> -p <%= port %>:<%= port %> <%= dockerrootrepo %>/<%= baseName %>'
+}

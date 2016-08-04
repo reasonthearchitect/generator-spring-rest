@@ -1,12 +1,18 @@
+management.security.enabled: false
+security.basic.enabled: false
+
 server:
     port: <%= port %>
-
-liquibase:
-    context: prod
 
 spring:
     profiles:
         active: prod
+    cloud:
+        stream:
+            kafka:
+                binder:
+                    zkNodes: <%= zookeeperurl %>
+                    brokers: <%= kafkaurl %>
     
 metrics:
     jmx.enabled: true
@@ -19,7 +25,3 @@ metrics:
         host: localhost
         port: 2003
         prefix: <%= baseName %>
-
-http:
-    cache:
-        timeToLiveInDays: 31

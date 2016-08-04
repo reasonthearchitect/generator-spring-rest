@@ -31,7 +31,7 @@ SianGenerator.prototype.askFor = function askFor() {
 
     console.log('\nWelcome to the Sian Generator v' + packagejs.version + '\n');
     var insight = this.insight();
-    var questions = 5; // making questions a variable to avoid updating each question by hand when adding additional options
+    var questions = 7; // making questions a variable to avoid updating each question by hand when adding additional options
 
      var prompts = [
         {
@@ -55,29 +55,13 @@ SianGenerator.prototype.askFor = function askFor() {
             default: 'com.tek.myservice'
         },
         {
-            type: 'list',
-            name: 'adddocker',
-            message: '(3/' + questions + ') Do you want to add Docker to the project?',
-            choices: [
-                {
-                    value: 'yes',
-                    name: 'Yes'
-                },
-                {
-                    value: 'no',
-                    name: 'No'
-                }
-            ],
-            default: 0
-        },
-        {
             type: 'input',
             name: 'gitreponame',
             validate: function (input) {
                 if (/^([a-zA-Z0-9_]*\/[a-zA-Z0-9_]*)$/.test(input)) return true;
                 return 'Not a valid Git URL';
             },
-            message: '(4/' + questions + ') What is the parent git repo name?',
+            message: '(3/' + questions + ') What is the git repo name?',
             default: 'change/me'
         },
         {
@@ -87,17 +71,34 @@ SianGenerator.prototype.askFor = function askFor() {
                 if (/^([0-9_]*)$/.test(input)) return true;
                 return 'Not a valid port';
             },
-            message: '(5/' + questions + ') What port would you like to use?',
+            message: '(4/' + questions + ') What port would you like to use?',
             default: '8080'
+        },
+        {
+            type: 'input',
+            name: 'dockerrootrepo',
+            message: '(5/' + questions + ') What is the docker root repo name?'
+        },
+        {
+            type: 'input',
+            name: 'zookeeperurl',
+            message: '(6/' + questions + ') What is the production zookeeper url?'
+        },
+        {
+            type: 'input',
+            name: 'kafkaurl',
+            message: '(7/' + questions + ') What is the production kafka url?'
         }
     ];
 
     this.baseName               = this.config.get('baseName');
     this.packageName            = this.config.get('packageName');
-    this.adddocker              = this.config.get('adddocker');
-    this.gitreponame            = this.config.get('gitreponame')
+    this.gitreponame            = this.config.get('gitreponame');
+    this.dockerrootrepo         = this.config.get('dockerrootrepo');
     this.packageNameGenerated   = this.config.get('packageNameGenerated');
     this.port                   = this.config.get('port');
+    this.zookeeperurl           = this.config.get('zookeeperurl');
+    this.kafkaurl               = this.config.get('kafkaurl');
 
     if (this.baseName != null &&
         this.packageName != null
@@ -113,8 +114,11 @@ SianGenerator.prototype.askFor = function askFor() {
             this.baseName               = props.baseName;
             this.packageName            = props.packageName;
             this.gitreponame            = props.gitreponame;
-            this.adddocker              = props.adddocker;
             this.port                   = props.port;
+            this.dockerrootrepo         = props.dockerrootrepo;
+            this.zookeeperurl           = props.zookeeperurl;
+            this.kafkaurl               = props.kafkaurl;
+
             var generated               = ".generated";
             this.packageNameGenerated   = props.packageName +  generated;
             
@@ -140,7 +144,6 @@ SianGenerator.prototype.app = function app() {
     dogradlew(this);
     dogradle(this);
     doapp(this);
-    doconcourse(this);
     dodockerkafka(this);
     doJbehave(this, this.packageFolder); 
     doIntegrationTest(this);
@@ -150,10 +153,12 @@ SianGenerator.prototype.app = function app() {
     this.config.set('baseName',             this.baseName);
     this.config.set('packageName',          this.packageName);
     this.config.set('packageNameGenerated', this.packageNameGenerated);
-    this.config.set('adddocker',            this.adddocker);
     this.config.set('gitreponame'),         this.gitreponame;  
     this.config.set('packageFolder'),       this.packageFolder;
     this.config.set('port'),                this.port;
+    this.config.set('dockerrootrepo',       this.dockerrootrepo);
+    this.config.set('zookeeperurl',         this.zookeeperurl );
+    this.config.set('kafkaurl',             this.kafkaurl);
 };
 
 function dotest(thing) {
@@ -192,26 +197,15 @@ function dodocs(thing) {
     thing.template('docs/_dev_env_setup.md',     'docs/dev_env_setup.md', thing, {});
     thing.template('docs/_dev_project_setup.md', 'docs/dev_project_setup.md', thing, {});
     thing.template('docs/_kafka_setup.md',       'docs/kafka_setup.md', thing, {});
-    thing.template('docs/_pipeline_setup.md',    'docs/pipeline_setup.md', thing, {});
     thing.template('docs/_streams.md',           'docs/steams.md', thing, {});
-}
-
-function doconcourse(thing) {
-
-    thing.template('_pipeline.yml',             'pipeline.yml', thing, {});
-    thing.copy('credentials.example.yml',       'credentials.yml');
-    thing.template('ci/tasks/_package.yml',     'ci/tasks/package.yml', thing, {});
-    thing.template('ci/scripts/_package.sh',    'ci/scripts/package.sh', thing, {});
-
-    if (thing.adddocker == "yes") {
-        thing.template('_Dockerfile',               'Dockerfile', thing, {});    
-    }
 }
 
 function doroot(thing) {
     thing.template('_README.md',                'README.md', thing, {});
     thing.copy('.gitignore',                    '.gitignore');
     thing.copy('LICENSE',                       'LICENSE');
+    thing.template('_Jenkinsfile',              'Jenkinsfile', thing, {});
+    thing.template('_Dockerfile',               'Dockerfile', thing, {}); 
 }
 
 function dogradlew(thing) {
@@ -247,7 +241,6 @@ function dogradle(thing) {
     
     // Testing
     thing.copy('gradle/conf/test/restassured.gradle',   'gradle/conf/test/restassured.gradle');
-    thing.copy('gradle/conf/test/sonar.gradle',         'gradle/conf/test/sonar.gradle');
     thing.copy('gradle/conf/test/unit.gradle',          'gradle/conf/test/unit.gradle');
     thing.copy('gradle/conf/test/integration.gradle',   'gradle/conf/test/integration.gradle');
     thing.copy('gradle/conf/test/jbehave.gradle',       'gradle/conf/test/jbehave.gradle');

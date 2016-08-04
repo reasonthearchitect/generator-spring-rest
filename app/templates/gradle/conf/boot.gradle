@@ -1,10 +1,12 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'spring-boot'
-apply plugin: 'war'
 
-archivesBaseName = '<%= baseName %>'
-description = ''
+jar{
+    baseName = '<%= baseName %>'
+    version = '0.0.1-SNAPSHOT'
+    description = ''
+}
 
 defaultTasks 'bootRun'
 
@@ -22,7 +24,6 @@ bootRun {
 
 configurations {
     all*.exclude module : 'spring-boot-starter-logging'
-    all*.exclude module: "logback-classic"
 }
 
 dependencies {
