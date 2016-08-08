@@ -1,0 +1,25 @@
+server:
+  port: <%= port %>
+
+---
+spring:
+  profiles:
+    active: dev
+  application:
+    name: <%= baseName %>
+  cloud:
+    config:
+      enabled: false
+
+---
+server:
+  port: <%= port %> 
+spring:
+  profiles:
+    active: prod
+  application:
+    name: <%= baseName %>
+  cloud:
+    config:
+      enabled: true
+      uri: <%= configserverurl %>

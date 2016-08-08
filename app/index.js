@@ -88,6 +88,11 @@ SianGenerator.prototype.askFor = function askFor() {
             type: 'input',
             name: 'kafkaurl',
             message: '(7/' + questions + ') What is the production kafka url?'
+        },
+        {
+            type: 'input',
+            name: 'configserverurl',
+            message: '(7/' + questions + ') What is the URL of the configuration server?'
         }
     ];
 
@@ -99,6 +104,7 @@ SianGenerator.prototype.askFor = function askFor() {
     this.port                   = this.config.get('port');
     this.zookeeperurl           = this.config.get('zookeeperurl');
     this.kafkaurl               = this.config.get('kafkaurl');
+    this.configserverurl        = this.config.get('configserverurl')
 
     if (this.baseName != null &&
         this.packageName != null
@@ -118,6 +124,7 @@ SianGenerator.prototype.askFor = function askFor() {
             this.dockerrootrepo         = props.dockerrootrepo;
             this.zookeeperurl           = props.zookeeperurl;
             this.kafkaurl               = props.kafkaurl;
+            this.configserverurl        = props.configserverurl;
 
             var generated               = ".generated";
             this.packageNameGenerated   = props.packageName +  generated;
@@ -159,6 +166,7 @@ SianGenerator.prototype.app = function app() {
     this.config.set('dockerrootrepo',       this.dockerrootrepo);
     this.config.set('zookeeperurl',         this.zookeeperurl );
     this.config.set('kafkaurl',             this.kafkaurl);
+    this.config.set('configserverurl',      this.configserverurl);
 };
 
 function dotest(thing) {
@@ -252,14 +260,13 @@ function doapp(thing, interpolateRegex) {
     var interpolateRegex = /<%=([\s\S]+?)%>/g;
 
     // Resources
+
+    thing.template(resourceDir + '/_bootstrap.yml', resourceDir + 'bootstrap.yml', thing, {});
     thing.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', thing, {'interpolate': interpolateRegex});
     thing.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', thing, {});
     thing.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', thing, {});
-    thing.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml', thing, {});
     thing.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', thing, {});
     thing.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', thing, {});
-    thing.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', thing, {});
-    thing.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml', thing, {});
     
     // Code
     thing.template('src/main/java/package/_Application.java',     'src/main/java/'+ thing.packageFolder +'/Application.java', thing, {});
