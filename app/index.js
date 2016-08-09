@@ -266,7 +266,6 @@ function doapp(thing, interpolateRegex) {
     thing.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', thing, {});
     thing.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', thing, {});
     thing.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', thing, {});
-    thing.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', thing, {});
     
     // Code
     thing.template('src/main/java/package/_Application.java',     'src/main/java/'+ thing.packageFolder +'/Application.java', thing, {});
